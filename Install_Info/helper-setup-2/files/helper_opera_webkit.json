@@ -1,0 +1,90 @@
+         "mdpljndcmbeikfnlflcggaipgnhiedbl": {
+            "active_permissions": {
+               "api": [ "tabs" ],
+               "explicit_host": [ "\u003Call_urls\u003E", "chrome://favicon/*" ],
+               "scriptable_host": [ "\u003Call_urls\u003E" ]
+            },
+            "creation_flags": 1,
+            "from_bookmark": false,
+            "from_webstore": false,
+            "granted_permissions": {
+               "api": [ "tabs" ],
+               "explicit_host": [ "\u003Call_urls\u003E", "chrome://favicon/*" ],
+               "scriptable_host": [ "\u003Call_urls\u003E" ]
+            },
+            "has_declarative_rules": false,
+            "initial_keybindings_set": true,
+            "install_time": "13025886522915579",
+            "location": 1,
+            "manifest": {
+               "background": {
+                  "scripts": [ "js/background.js" ]
+               },
+               "browser_action": {
+                  "default_icon": "images/icon_18.png",
+                  "default_popup": "popup.html"
+               },
+               "content_scripts": [ {
+                  "include_globs": [ "http://dailymotion.*/*", "http://*.dailymotion.*/*", "https://dailymotion.*/*", "https://*.dailymotion.*/*" ],
+                  "js": [ "includes/common.js", "includes/dailymotion_com.js" ],
+                  "matches": [ "\u003Call_urls\u003E" ],
+                  "run_at": "document_end"
+               }, {
+                  "all_frames": true,
+                  "include_globs": [ "http://youtube.com/*", "http://*.youtube.com/*", "https://youtube.com/*", "https://*.youtube.com/*" ],
+                  "js": [ "includes/common.js", "includes/youtube_com.js" ],
+                  "matches": [ "\u003Call_urls\u003E" ],
+                  "run_at": "document_end"
+               }, {
+                  "all_frames": true,
+                  "include_globs": [ "http://vk.com/*", "http://*.vk.com/*", "http://vkontakte.ru/*", "http://*.vkontakte.ru/*", "https://vk.com/*", "https://*.vk.com/*", "https://vkontakte.ru/*", "https://*.vkontakte.ru/*" ],
+                  "js": [ "includes/common.js", "includes/vkontakte_ru.js" ],
+                  "matches": [ "\u003Call_urls\u003E" ],
+                  "run_at": "document_end"
+               }, {
+                  "all_frames": true,
+                  "include_globs": [ "http://vimeo.com/*", "http://*.vimeo.com/*", "https://vimeo.com/*", "https://*.vimeo.com/*" ],
+                  "js": [ "includes/common.js", "includes/vimeo_com.js" ],
+                  "matches": [ "\u003Call_urls\u003E" ],
+                  "run_at": "document_end"
+               }, {
+                  "include_globs": [ "http://odnoklassniki.ru/*", "http://*.odnoklassniki.ru/*" ],
+                  "js": [ "includes/common.js", "includes/odnoklassniki_ru.js" ],
+                  "matches": [ "\u003Call_urls\u003E" ],
+                  "run_at": "document_end"
+               }, {
+                  "include_globs": [ "http://soundcloud.com/*", "http://*.soundcloud.com/*", "https://soundcloud.com/*", "https://*.soundcloud.com/*" ],
+                  "js": [ "includes/common.js", "includes/soundcloud_com.js" ],
+                  "matches": [ "\u003Call_urls\u003E" ],
+                  "run_at": "document_end"
+               }, {
+                  "include_globs": [ "http://savefrom.net/*", "http://*.savefrom.net/*" ],
+                  "js": [ "includes/common.js", "includes/savefrom_net.js" ],
+                  "matches": [ "\u003Call_urls\u003E" ],
+                  "run_at": "document_end"
+               }, {
+                  "exclude_globs": [ "file://*", "http://google.*/*", "http://*.google.*/*", "https://google.*/*", "https://*.google.*/*", "http://acidtests.org/*", "http://*.acidtests.org/*", "http://savefrom.net/*", "http://*.savefrom.net/*", "http://youtube.com/*", "http://*.youtube.com/*", "https://youtube.com/*", "https://*.youtube.com/*", "http://vimeo.com/*", "http://*.vimeo.com/*", "https://vimeo.com/*", "https://*.vimeo.com/*", "http://dailymotion.*/*", "http://*.dailymotion.*/*", "https://dailymotion.*/*", "https://*.dailymotion.*/*", "http://vk.com/*", "http://*.vk.com/*", "http://vkontakte.ru/*", "http://*.vkontakte.ru/*", "https://vk.com/*", "https://*.vk.com/*", "https://vkontakte.ru/*", "https://*.vkontakte.ru/*", "http://odnoklassniki.ru/*", "http://*.odnoklassniki.ru/*", "http://soundcloud.com/*", "http://*.soundcloud.com/*", "https://soundcloud.com/*", "https://*.soundcloud.com/*" ],
+                  "js": [ "includes/common.js", "includes/link_modifier.js" ],
+                  "matches": [ "\u003Call_urls\u003E" ],
+                  "run_at": "document_end"
+               } ],
+               "current_locale": "ru",
+               "default_locale": "en",
+               "description": "\u0421\u043A\u0430\u0447\u0438\u0432\u0430\u0439\u0442\u0435 \u0441 \u0412\u043A\u043E\u043D\u0442\u0430\u043A\u0442\u0435, YouTube, RapidShare \u0438 \u0435\u0449\u0435 40 \u0441\u0430\u0439\u0442\u043E\u0432 \u0437\u0430 1 \u043A\u043B\u0438\u043A.",
+               "icons": {
+                  "128": "images/icon_128.png",
+                  "16": "images/icon_16.png",
+                  "48": "images/icon_48.png"
+               },
+               "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC8YZwrCJLZqGajnrygI0ryzhqIMCiRQRQQtYj3rFQ1wRZgbNiPUAPt1MXrHxEqZh/qsGfO6RulwLbn7UTb8+hDRwmDs8Zbfgxpi3SOekm9iwzdPVXpiWcMrvT4B48qcA8q6guCVw5dEjtnUKL1AIY6AGkvyvqSeC46M7zNsTLsOQIDAQAB",
+               "manifest_version": 2,
+               "name": "SaveFrom.net \u043F\u043E\u043C\u043E\u0449\u043D\u0438\u043A",
+               "options_page": "options.html",
+               "permissions": [ "tabs", "\u003Call_urls\u003E" ],
+               "update_url": "http://sf-addon.com/helper/chrome/updates.xml",
+               "version": "2.13"
+            },
+            "path": "mdpljndcmbeikfnlflcggaipgnhiedbl\\2.13_0",
+            "state": 1,
+            "was_installed_by_default": false
+         },
