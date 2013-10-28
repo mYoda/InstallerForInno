@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preferences>
+  <section id="ui">
+    <value id="name" xml:space="preserve">SaveFrom.net помощник</value>
+    <value id="default-prefs-applied" xml:space="preserve">1</value>
+  </section>
+  <section id="wuid-b1f04b44-0bb6-764c-9a1c-65b806959575">
+    <value id="network_access" xml:space="preserve">24</value>
+  </section>
+  <section id="user">
+    <value id="GadgetRunOnSecureConn" xml:space="preserve">yes</value>
+    <value id="GadgetEnabledOnStartup" xml:space="preserve">yes</value>
+  </section>
+</preferences>

@@ -34,7 +34,7 @@ UsePreviousTasks=no
 DirExistsWarning=no
 UsePreviousSetupType=no  
 
-DisableWelcomePage=yes
+;DisableWelcomePage=yes
 DisableReadyMemo=yes
 DisableReadyPage=yes
 DisableProgramGroupPage=yes
@@ -58,15 +58,15 @@ Name: turkish; MessagesFile: localization\installer\Turkish.isl
 #include "localization\installer\Turkish.inc"
 
 [Files]
-Source: "files\helper_opera.oex"; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
-Source: "files\wuid-b1f04b44-0bb6-764c-9a1c-65b806959575\*"; DestDir: "{tmp}\wuid-b1f04b44-0bb6-764c-9a1c-65b806959575\"; Flags: dontcopy recursesubdirs createallsubdirs deleteafterinstall
-Source: "files\helper_firefox.xpi"; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
-Source: "files\helper_firefox.json"; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
-Source: "files\helper_safari.safariextz"; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
-Source: "files\helper_chrome.crx"; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
-Source: "files\helper_chrome.json"; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
-Source: "files\helper_opera_webkit.crx"; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
-Source: "files\helper_opera_webkit.json"; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
+;Source: "files\helper_opera.oex"; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
+;Source: "files\wuid-b1f04b44-0bb6-764c-9a1c-65b806959575\*"; DestDir: "{tmp}\wuid-b1f04b44-0bb6-764c-9a1c-65b806959575\"; Flags: dontcopy recursesubdirs createallsubdirs deleteafterinstall
+;Source: "files\helper_firefox.xpi"; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
+;Source: "files\helper_firefox.json"; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
+;Source: "files\helper_safari.safariextz"; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
+;Source: "files\helper_chrome.crx"; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
+;Source: "files\helper_chrome.json"; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
+;Source: "files\helper_opera_webkit.crx"; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
+;Source: "files\helper_opera_webkit.json"; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
 
 Source: utils\downloader.exe; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
 Source: utils\7za.exe; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
