@@ -67,6 +67,8 @@ Filename: "{app}\puzzleclub.exe"; Description: "Запустить Пазл КЛУБ"; Flags: pos
 
 [UninstallDelete]
 
+
+
 [CustomMessages]
 AlreadyInstalled=Программа %1 версия %2 уже установлена.
 ConfirmReinstall=Переустановить программу?

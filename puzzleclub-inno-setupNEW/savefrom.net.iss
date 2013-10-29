@@ -18,7 +18,7 @@ AppUpdatesURL={#MyAppURL}
 OutputDir=.\bin
 OutputBaseFilename={#MyInstName}_{#VerString}
 CreateAppDir=no
-SetupIconFile=Graphics\install.ico
+SetupIconFile=.\Graphics\install.ico
 WizardSmallImageFile=Graphics\header.bmp
 
 FlatComponentsList=yes
