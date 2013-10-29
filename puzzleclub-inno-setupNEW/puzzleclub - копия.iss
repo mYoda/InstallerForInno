@@ -704,7 +704,14 @@ begin
   CreateBrowsersDownloadPage;
   WizardForm.FinishedHeadingLabel.Visible := False;
   WizardForm.FinishedLabel.Visible := False;
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 334664678171ee585b80ec89c11a1fda015e72b7
+>>>>>>> 1b90a014cabd55085d92f7245d0abb47c3840c5d
 
   WizardForm.WizardSmallBitmapImage.Visible := True;
   //ExtractTemporaryFile('header_bg.bmp');
@@ -732,6 +739,13 @@ begin
     WizardForm.WizardBitmapImage2.Bitmap.LoadFromFile(ExpandConstant('{tmp}\yandex_browser_setup.bmp'));  
   end;
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> a05f9e774537a7fe6cff8d10e9c2dd2b002b8199
+>>>>>>> 334664678171ee585b80ec89c11a1fda015e72b7
+>>>>>>> 1b90a014cabd55085d92f7245d0abb47c3840c5d
   WizardForm.PageNameLabel.Visible := False;
   WizardForm.PageDescriptionLabel.Visible := False;    
   
