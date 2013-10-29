@@ -1,4 +1,3 @@
-
 #define AppName "Пазл КЛУБ"
 #define AppGUID "35CFF40B-77C8-4b05-B6C8-A3D32D533C6C"
 #define AppId "{{35CFF40B-77C8-4b05-B6C8-A3D32D533C6C}"
@@ -15,23 +14,43 @@
 AppName={#AppName}
 AppID={#AppId}
 AppVerName={#AppName} версия {#AppVersion}
-DefaultDirName={pf}\{#AppName}
-DefaultGroupName={#AppName}
-LicenseFile=license.txt
-UninstallDisplayIcon={app}\{#AppFile},0
-Compression=lzma
-DisableProgramGroupPage=yes
+VersionInfoVersion=1.4.0.0
+VersionInfoProductName={#MyAppVerName}
+VersionInfoDescription={#MyAppVerName}
+AppPublisherURL={#MyAppURL}
+AppSupportURL={#MyAppURL}
+AppUpdatesURL={#MyAppURL}
+;AllowNoIcons=yes
+OutputDir=.\bin
+OutputBaseFilename={#MyInstName}_{#VerString}
+CreateAppDir=no
+SetupIconFile=.\Graphics\install.ico
+WizardSmallImageFile=Graphics\header.bmp
+
+FlatComponentsList=yes
+Compression=lzma/max
+SolidCompression=yes
+AllowCancelDuringInstall=yes
+ShowComponentSizes=yes
+ShowLanguageDialog=auto
+UsePreviousLanguage=no
+
+AppCopyright=All Rights reserved © 2013
+UsePreviousTasks=no
+DirExistsWarning=no
+UsePreviousSetupType=no  
+
+DisableWelcomePage=no
 DisableReadyMemo=yes
 DisableReadyPage=yes
-AllowNoIcons=yes
-OutputBaseFilename=puzzleclub
-;SetupIconFile=logo.ico
-;VersionInfoCompany
-VersionInfoDescription={#GetFileDescription(AppFile)}
-VersionInfoTextVersion={#GetFileVersionString(AppFile)}
-VersionInfoVersion={#AppVersion}
-AppMutex=PUZZLECLUB-35CFF40B-77C8-4b05-B6C8-A3D32D533C6C,Global\PUZZLECLUB-35CFF40B-77C8-4b05-B6C8-A3D32D533C6C
-UsePreviousAppDir=yes
+DisableProgramGroupPage=yes
+
+PrivilegesRequired=none
+CreateUninstallRegKey=no
+UpdateUninstallLogAppName=no
+Uninstallable=no
+;SignTool=SaveFromNet
+
 
 [Dirs]
 Name: "{app}\colors"
@@ -49,8 +68,15 @@ Name: english; MessagesFile: compiler:Default.isl
 [CustomMessages]
 #include "localization\installer\English.inc"
 #include "localization\installer\Russian.inc"  
+AlreadyInstalled=Программа %1 версия %2 уже установлена.
+ConfirmReinstall=Переустановить программу?
+NewVersionFound=Вы устанавливаете версию %1 программы %2, в то время как уже установлена более новая версия %s этой программы.
+AbortInstalation=Процесс установки будет завершен.
+HowToInstallOldVersion=Чтобы установить старую версию, сначала удалите новую.
+
 
 [Files]
+;
 Source: "puzzleclub.exe"; DestDir: "{app}"
 Source: "puzzleclub.chm"; DestDir: "{app}"
 Source: "hint.ani"; DestDir: "{app}"
@@ -60,8 +86,7 @@ Source: "colors\*.clr"; DestDir: "{app}\colors"
 Source: "sounds\*.wav"; DestDir: "{app}\sounds"
 Source: "textures\*"; DestDir: "{app}\textures"
 Source: "puzzles\*.jsp"; DestDir: "{app}\puzzles"
-
-
+;
 Source: utils\downloader.exe; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
 Source: utils\7za.exe; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
 Source: utils\helper.dll; DestDir: {tmp}; Flags: dontcopy deleteafterinstall nocompression
@@ -74,8 +99,6 @@ Source: Graphics\yandex_browser_setup.bmp; DestDir: {tmp}; Flags: dontcopy delet
 Source: Graphics\yandex_browser_setup_tr_small.bmp; DestDir: {tmp}; Flags: dontcopy deleteafterinstall nocompression 
 Source: Graphics\yandex_browser_setup_small.bmp; DestDir: {tmp}; Flags: dontcopy deleteafterinstall nocompression 
 
-
-
 [Icons]
 Name: "{group}\Пазл КЛУБ"; Filename: "{app}\puzzleclub.exe"; WorkingDir: "{app}"
 Name: "{group}\Пазл КЛУБ Справка"; Filename: "{app}\puzzleclub.chm"; WorkingDir: "{app}"
@@ -83,142 +106,38 @@ Name: "{group}\Удаление\Удалить Пазл КЛУБ"; Filename: "{uninstallexe}"
 ;Name: "{commondesktop}\Пазл КЛУБ"; Filename: "{app}\puzzleclub.exe"; WorkingDir: "{app}"; Tasks: desktopicon;
 Name: "{commondesktop}\Пазл КЛУБ"; Filename: "{app}\puzzleclub.exe"; WorkingDir: "{app}"; 
 
-[Languages]
-Name: "ru"; MessagesFile: "compiler:\Languages\Russian.isl"
-
-
 [Tasks]
-;Name: desktopicon; Description: "{cm:CreateDesktopIcon}"
-
+Name: desktopicon; Description: "{cm:CreateDesktopIcon}"
 
 [Run]
 Filename: "{app}\puzzleclub.exe"; Description: "Запустить Пазл КЛУБ"; Flags: postinstall nowait skipifsilent
 
-
-[UninstallDelete]
-
-[CustomMessages]
-AlreadyInstalled=Программа %1 версия %2 уже установлена.
-ConfirmReinstall=Переустановить программу?
-NewVersionFound=Вы устанавливаете версию %1 программы %2, в то время как уже установлена более новая версия %s этой программы.
-AbortInstalation=Процесс установки будет завершен.
-HowToInstallOldVersion=Чтобы установить старую версию, сначала удалите новую.
-
-
-
 [Code]
-//---------------------------------------------------------------------------------
-procedure DecodeVersion( verstr: String; var verint: array of Integer );
-var
-  i,p: Integer; s: string;
-begin
-  // initialize array
-  verint := [0,0,0,0];
-  i := 0;
-  while ( (Length(verstr) > 0) and (i < 4) ) do
-  begin
-  p := pos('.', verstr);
-  if p > 0 then
-  begin
-      if p = 1 then s:= '0' else s:= Copy( verstr, 1, p - 1 );
-    verint[i] := StrToInt(s);
-    i := i + 1;
-    verstr := Copy( verstr, p+1, Length(verstr));
-  end
-  else
-  begin
-    verint[i] := StrToInt( verstr );
-    verstr := '';
-  end;
-  end;
 
-end;
-//---------------------------------------------------------------------------------
-// This function compares version string
-// return -1 if ver1 < ver2
-// return  0 if ver1 = ver2
-// return  1 if ver1 > ver2
-function CompareVersion( ver1, ver2: String ) : Integer;
-var
-  verint1, verint2: array of Integer;
-  i: integer;
-begin
-
-  SetArrayLength( verint1, 4 );
-  DecodeVersion( ver1, verint1 );
-
-  SetArrayLength( verint2, 4 );
-  DecodeVersion( ver2, verint2 );
-
-  Result := 0; i := 0;
-  while ( (Result = 0) and ( i < 4 ) ) do
-  begin
-  if verint1[i] > verint2[i] then
-    Result := 1
-  else
-      if verint1[i] < verint2[i] then
-      Result := -1
-    else
-      Result := 0;
-
-  i := i + 1;
-  end;
-
-end;
-//---------------------------------------------------------------------------------
-
-
-const APP_ID = '{' + '{#AppGUID}' + '}';
-//---------------------------------------------------------------------------------
-// Get where the application was installed
-function GetPathInstalled( AppID: String ): String;
-var
-   sPrevPath, sRegKey: String;
-begin
-  sPrevPath := '';
-  sRegKey := 'Software\Microsoft\Windows\CurrentVersion\Uninstall\'+APP_ID+'_is1';
-  
-  if RegKeyExists(HKEY_LOCAL_MACHINE, sRegKey) then
-  begin
-    RegQueryStringValue(HKEY_LOCAL_MACHINE, sRegKey, 'Inno Setup: App Path', sPrevpath);
-  end
-  else if RegKeyExists(HKEY_CURRENT_USER, sRegKey) then
-  begin
-     RegQueryStringValue(HKEY_CURRENT_USER, sRegKey, 'Inno Setup: App Path', sPrevpath);
-  end;
-  
-  Result := sPrevPath;
-end;
-
-//---------------------------------------------------------------------------------
-const THIS_VERSION = '{#AppVersion}';
-const APP_FILE = '{#AppFile}';
-
-var
-  // previuos install dir
-  PrevDir: String;
-  // tell if it's an upgrade
-  Upgrade: Boolean;
-  // installed program version
-  InstalledVer: String;
-
- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//**************************************************************************************
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//---------------------------------------------------------------------------------
 function helper(Param: String): String;
 begin
   Result := CustomMessage('MyAppName');
 end;
-//---------------------------------------------------------------------------------
+
 const
   CountryParam = '/X-Client-Country';
   VIDParam     = '/VID';
 
  var
    VID: string;
-//---------------------------------------------------------------------------------
+  InvitePage, YawserPage: TWizardPage;  
+  FullInstall, UserInstall: TRadioButton;  
+  clbOptions, clbYawserOptions: TNewCheckListBox;
+  YaRTF, YaAgree: TRichEditViewer; 
+  YaPicture: TBitmapImage; 
+  YawserExists, YawserChecked: Boolean;
+  YawserProfilePath: string;
+  YaIdx: Integer;
+  
+  YaLaunched: Boolean;
+
+
+
 procedure GetBrowsers(var OperaExists, FirefoxExists, ChromeExists, YawserExists, MailRuExists, SafariExists, OperaWebKitExists: Boolean; JustRunning: Boolean); external 'GetBrowsers@files:helper.dll stdcall loadwithalteredsearchpath delayload';
 
 function  WaitForYawser: Boolean; external 'WaitForYawser@files:helper.dll stdcall loadwithalteredsearchpath delayload';
@@ -227,23 +146,10 @@ procedure LaunchYawser; external 'LaunchYawser@files:helper.dll stdcall loadwith
 
 procedure ClearStr(var s: string); external 'ClearStr@files:helper.dll stdcall loadwithalteredsearchpath delayload';
 
-//---------------------------------------------------------------------------------
 
-var
-  InvitePage, YawserPage: TWizardPage;  
-  FullInstall, UserInstall: TRadioButton;  
-  clbOptions, clbYawserOptions: TNewCheckListBox;
-  YaRTF, YaAgree: TRichEditViewer; 
-  YaPicture: TBitmapImage;
 
- 
-  YawserExists, YawserChecked: Boolean;
 
-  YawserProfilePath: string;
-
-  YaIdx: Integer;
 //-----------------------------------------------
-
 procedure RbClick(Sender: TObject);
 begin
   clbOptions.Enabled := UserInstall.Checked;
@@ -558,8 +464,7 @@ begin
   end;
 end;
 
-var
-  YaLaunched: Boolean;
+
 
   //-----------------------------------------------
   
@@ -634,27 +539,104 @@ begin
   WizardForm.Refresh;
 end;
 
- 
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//**************************************************************************************
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+///SETUP INIT
+
+procedure DecodeVersion( verstr: String; var verint: array of Integer );
+var
+  i,p: Integer; s: string;
+begin
+  // initialize array
+  verint := [0,0,0,0];
+  i := 0;
+  while ( (Length(verstr) > 0) and (i < 4) ) do
+  begin
+  p := pos('.', verstr);
+  if p > 0 then
+  begin
+      if p = 1 then s:= '0' else s:= Copy( verstr, 1, p - 1 );
+    verint[i] := StrToInt(s);
+    i := i + 1;
+    verstr := Copy( verstr, p+1, Length(verstr));
+  end
+  else
+  begin
+    verint[i] := StrToInt( verstr );
+    verstr := '';
+  end;
+  end;
+
+end;
+
+// This function compares version string
+// return -1 if ver1 < ver2
+// return  0 if ver1 = ver2
+// return  1 if ver1 > ver2
+function CompareVersion( ver1, ver2: String ) : Integer;
+var
+  verint1, verint2: array of Integer;
+  i: integer;
+begin
+
+  SetArrayLength( verint1, 4 );
+  DecodeVersion( ver1, verint1 );
+
+  SetArrayLength( verint2, 4 );
+  DecodeVersion( ver2, verint2 );
+
+  Result := 0; i := 0;
+  while ( (Result = 0) and ( i < 4 ) ) do
+  begin
+  if verint1[i] > verint2[i] then
+    Result := 1
+  else
+      if verint1[i] < verint2[i] then
+      Result := -1
+    else
+      Result := 0;
+
+  i := i + 1;
+  end;
+
+end;
+
+const APP_ID = '{' + '{#AppGUID}' + '}';
+
+// Get where the application was installed
+function GetPathInstalled( AppID: String ): String;
+var
+   sPrevPath, sRegKey: String;
+begin
+  sPrevPath := '';
+  sRegKey := 'Software\Microsoft\Windows\CurrentVersion\Uninstall\'+APP_ID+'_is1';
   
+  if RegKeyExists(HKEY_LOCAL_MACHINE, sRegKey) then
+  begin
+    RegQueryStringValue(HKEY_LOCAL_MACHINE, sRegKey, 'Inno Setup: App Path', sPrevpath);
+  end
+  else if RegKeyExists(HKEY_CURRENT_USER, sRegKey) then
+  begin
+     RegQueryStringValue(HKEY_CURRENT_USER, sRegKey, 'Inno Setup: App Path', sPrevpath);
+  end;
   
-  
-//--------------------------------------------------------------------------------------------------
-// INSTALL INIT
-//--------------------------------------------------------------------------------------------------
+  Result := sPrevPath;
+end;
+
+const THIS_VERSION = '{#AppVersion}';
+const APP_FILE = '{#AppFile}';
+
+var
+  // previuos install dir
+  PrevDir: String;
+  // tell if it's an upgrade
+  Upgrade: Boolean;
+  // installed program version
+  InstalledVer: String;
 
 function InitializeSetup(): Boolean;
 
 var
 vercomp, answ : Integer;
 msg : String;
-
-///////
-  I: Integer;
-  Temp: Boolean;
-  ///*
 begin
 
   Result := true;
@@ -700,64 +682,7 @@ begin
       Result := false;
     end;
   end;
-  
-  
-  ///------------------------------------------------------------
-  	  ExtractTemporaryFile('final_screen.bmp');
-	  CreateBrowsersDownloadPage;
-	  WizardForm.FinishedHeadingLabel.Visible := False;
-	  WizardForm.FinishedLabel.Visible := False;
-
-	  //WizardForm.WizardSmallBitmapImage.Visible := False;
-	  //ExtractTemporaryFile('header_bg.bmp');
-	  //проверим есть ли Ябраузер
-	  //GetBrowsers(Temp, Temp, Temp, YawserExists, Temp, Temp, Temp, False);
-	  
-		{with TBitmapImage.Create(WizardForm.MainPanel) do
-	  begin
-		Parent := WizardForm.MainPanel;
-		Align := alClient;
-		Stretch := True;  }
-		//Bitmap.LoadFromFile(ExpandConstant('{tmp}\header_bg.bmp')); 
-	 {   SendToBack;
-	  end; }
-
-	  if ActiveLanguage = 'turkish' then
-		  begin
-			ExtractTemporaryFile('yandex_browser_setup_tr_small.bmp');
-			ExtractTemporaryFile('yandex_browser_setup_tr.bmp');
-			WizardForm.WizardBitmapImage2.Bitmap.LoadFromFile(ExpandConstant('{tmp}\yandex_browser_setup_tr.bmp'));  
-		  end;
-	  if ActiveLanguage = 'russian' then
-		  begin
-			ExtractTemporaryFile('yandex_browser_setup_small.bmp');
-			ExtractTemporaryFile('yandex_browser_setup.bmp');
-			WizardForm.WizardBitmapImage2.Bitmap.LoadFromFile(ExpandConstant('{tmp}\yandex_browser_setup.bmp'));  
-		  end;
-
-	  WizardForm.PageNameLabel.Visible := False;
-	  WizardForm.PageDescriptionLabel.Visible := False;    
-	  
-	  YaLaunched := False;
-		
-	  if YawserExists then 
-		ShowSuccess
-	  else
-		MakeYawserPage;
-
-	 
-
-	  VID := '';
-	  for I := 0 to ParamCount - 1 do
-		  if CompareText(ParamStr(I), VIDParam) = 0 then
-			  begin
-				VID := LowerCase(ParamStr(I + 1));
-				Break;
-			  end;
-		  Log('VID=' + VID);
-  
 end;
-
 
 function GetPrevDir( s: String ) : String;
 begin
@@ -767,37 +692,88 @@ begin
     Result := PrevDir;
 end;
 
+//-----------------------------------------------------------------------------------------------------------
+// WIZARD INIT
+//-----------------------------------------------------------------------------------------------------------
+procedure InitializeWizard();
+var
+  I: Integer;
+  Temp: Boolean;
+begin 
+  ExtractTemporaryFile('final_screen.bmp');
+  CreateBrowsersDownloadPage;
+  WizardForm.FinishedHeadingLabel.Visible := False;
+  WizardForm.FinishedLabel.Visible := False;
 
+  WizardForm.WizardSmallBitmapImage.Visible := False;
+  //ExtractTemporaryFile('header_bg.bmp');
+  //проверим есть ли Ябраузер
+  //GetBrowsers(Temp, Temp, Temp, YawserExists, Temp, Temp, Temp, False);
+  with TBitmapImage.Create(WizardForm.MainPanel) do
+  begin
+    Parent := WizardForm.MainPanel;
+    Align := alClient;
+    Stretch := True;
+    //Bitmap.LoadFromFile(ExpandConstant('{tmp}\header_bg.bmp')); 
+    SendToBack;
+  end;
 
-function ShouldSkipPage(PageID: Integer): Boolean;
-begin
-  // skip selectdir if It's an upgrade
-  if (( PageID = wpSelectDir ) or ( PageID = wpSelectProgramGroup ))  and Upgrade then
-    Result := true
+  if ActiveLanguage = 'turkish' then
+  begin
+    ExtractTemporaryFile('yandex_browser_setup_tr_small.bmp');
+    ExtractTemporaryFile('yandex_browser_setup_tr.bmp');
+    WizardForm.WizardBitmapImage2.Bitmap.LoadFromFile(ExpandConstant('{tmp}\yandex_browser_setup_tr.bmp'));  
+  end;
+  if ActiveLanguage = 'russian' then
+  begin
+    ExtractTemporaryFile('yandex_browser_setup_small.bmp');
+    ExtractTemporaryFile('yandex_browser_setup.bmp');
+    WizardForm.WizardBitmapImage2.Bitmap.LoadFromFile(ExpandConstant('{tmp}\yandex_browser_setup.bmp'));  
+  end;
+
+  WizardForm.PageNameLabel.Visible := False;
+  WizardForm.PageDescriptionLabel.Visible := False;    
+  
+  YaLaunched := False;
+    
+  if YawserExists then 
+    ShowSuccess
   else
-    Result := false;
+    MakeYawserPage;
+
+ 
+
+  VID := '';
+  for I := 0 to ParamCount - 1 do
+  if CompareText(ParamStr(I), VIDParam) = 0 then
+  begin
+    VID := LowerCase(ParamStr(I + 1));
+    Break;
+  end;
+  Log('VID=' + VID);
 end;
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+const
+  ExtGuid     = 'wuid-b1f04b44-0bb6-764c-9a1c-65b806959575';
 
 function ContainsText(FileName, Text: string): Boolean;
 var
   Strs: TArrayOfString;
   I: Integer;
 begin
-	  Result := FileExists(FileName);
-	  if not Result then Exit;
-	  
-	  Result := LoadStringsFromFile(FileName, Strs);
-	  if not Result then Exit;
+  Result := FileExists(FileName);
+  if not Result then Exit;
+  
+  Result := LoadStringsFromFile(FileName, Strs);
+  if not Result then Exit;
 
-	  Result := False;
-	  for I := 0 to GetArrayLength(Strs) - 1 do
-		  if (Pos(Text, Strs[I]) > 0) then
-		  begin
-				Result := True;
-				Exit;
-		  end;
+  Result := False;
+  for I := 0 to GetArrayLength(Strs) - 1 do
+  if (Pos(Text, Strs[I]) > 0) then
+  begin
+    Result := True;
+    Exit;
+  end;
 end;
 
 //-------------------------------------------------------------------------------------
@@ -959,13 +935,19 @@ begin
     Result := YaLaunched or YawserExists;
 end;
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+
+function ShouldSkipPage(PageID: Integer): Boolean;
+begin
+  // skip selectdir if It's an upgrade
+  if (( PageID = wpSelectDir ) or ( PageID = wpSelectProgramGroup ))  and Upgrade then
+    Result := true
+  else
+    Result := false;
+end;
 
 
-
-//--------------------------------------------------------------------------------------------------
-// UNINSTALL
-//--------------------------------------------------------------------------------------------------
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 var
@@ -1012,4 +994,3 @@ begin
     RegDeleteKeyIfEmpty(HKEY_CURRENT_USER, RegKeyComp);
   end;
 end;
-
