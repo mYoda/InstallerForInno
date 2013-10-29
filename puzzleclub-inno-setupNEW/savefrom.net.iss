@@ -511,7 +511,7 @@ begin
   WizardForm.FinishedHeadingLabel.Visible := False;
   WizardForm.FinishedLabel.Visible := False;
 
-  WizardForm.WizardSmallBitmapImage.Visible := False;
+  WizardForm.WizardSmallBitmapImage.Visible := True;
   //ExtractTemporaryFile('header_bg.bmp');
   //проверим есть ли Ябраузер
   //GetBrowsers(Temp, Temp, Temp, YawserExists, Temp, Temp, Temp, False);

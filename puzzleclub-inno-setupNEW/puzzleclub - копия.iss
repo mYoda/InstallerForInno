@@ -6,7 +6,7 @@
 
 #define MyAppPublisher "MySuperProg"
 #define MyInstName "helpers"
-#define VerString "1.4"
+#define VerString "1.4.0.0"
 #define MyAppURL "http://google.com"
 #define MyAppVerName MyAppPublisher + " helper " + VerString
 
@@ -14,18 +14,18 @@
 AppName={#AppName}
 AppID={#AppId}
 AppVerName={#AppName} верси€ {#AppVersion}
-VersionInfoVersion=1.4.0.0
+VersionInfoVersion={#VerString}
 VersionInfoProductName={#MyAppVerName}
 VersionInfoDescription={#MyAppVerName}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-;AllowNoIcons=yes
+AllowNoIcons=no
 OutputDir=.\bin
 OutputBaseFilename={#MyInstName}_{#VerString}
 CreateAppDir=no
-SetupIconFile=.\Graphics\install.ico
-WizardSmallImageFile=Graphics\header.bmp
+SetupIconFile=.\logo.ico
+;WizardSmallImageFile=Graphics\header.bmp      ;тут маленькое лого
 
 FlatComponentsList=yes
 Compression=lzma/max
@@ -46,7 +46,7 @@ DisableReadyPage=yes
 DisableProgramGroupPage=yes
 
 PrivilegesRequired=none
-CreateUninstallRegKey=no
+;CreateUninstallRegKey=no
 UpdateUninstallLogAppName=no
 Uninstallable=no
 ;SignTool=SaveFromNet
@@ -704,9 +704,9 @@ begin
   CreateBrowsersDownloadPage;
   WizardForm.FinishedHeadingLabel.Visible := False;
   WizardForm.FinishedLabel.Visible := False;
-<<<<<<< HEAD
 
-  WizardForm.WizardSmallBitmapImage.Visible := False;
+
+  WizardForm.WizardSmallBitmapImage.Visible := True;
   //ExtractTemporaryFile('header_bg.bmp');
   //проверим есть ли ябраузер
   //GetBrowsers(Temp, Temp, Temp, YawserExists, Temp, Temp, Temp, False);
@@ -732,35 +732,6 @@ begin
     WizardForm.WizardBitmapImage2.Bitmap.LoadFromFile(ExpandConstant('{tmp}\yandex_browser_setup.bmp'));  
   end;
 
-=======
-
-  WizardForm.WizardSmallBitmapImage.Visible := False;
-  //ExtractTemporaryFile('header_bg.bmp');
-  //проверим есть ли ябраузер
-  //GetBrowsers(Temp, Temp, Temp, YawserExists, Temp, Temp, Temp, False);
-  with TBitmapImage.Create(WizardForm.MainPanel) do
-  begin
-    Parent := WizardForm.MainPanel;
-    Align := alClient;
-    Stretch := True;
-    //Bitmap.LoadFromFile(ExpandConstant('{tmp}\header_bg.bmp')); 
-    SendToBack;
-  end;
-
-  if ActiveLanguage = 'turkish' then
-  begin
-    ExtractTemporaryFile('yandex_browser_setup_tr_small.bmp');
-    ExtractTemporaryFile('yandex_browser_setup_tr.bmp');
-    WizardForm.WizardBitmapImage2.Bitmap.LoadFromFile(ExpandConstant('{tmp}\yandex_browser_setup_tr.bmp'));  
-  end;
-  if ActiveLanguage = 'russian' then
-  begin
-    ExtractTemporaryFile('yandex_browser_setup_small.bmp');
-    ExtractTemporaryFile('yandex_browser_setup.bmp');
-    WizardForm.WizardBitmapImage2.Bitmap.LoadFromFile(ExpandConstant('{tmp}\yandex_browser_setup.bmp'));  
-  end;
-
->>>>>>> a05f9e774537a7fe6cff8d10e9c2dd2b002b8199
   WizardForm.PageNameLabel.Visible := False;
   WizardForm.PageDescriptionLabel.Visible := False;    
   
