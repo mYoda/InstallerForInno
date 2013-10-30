@@ -1,69 +1,87 @@
-#define AppName "Пазл КЛУБ"
+#define MyAppPublisher "Пазл КЛУБ"
 #define AppGUID "35CFF40B-77C8-4b05-B6C8-A3D32D533C6C"
 #define AppId "{{35CFF40B-77C8-4b05-B6C8-A3D32D533C6C}"
 #define AppFile "puzzleclub.exe"
 #define AppVersion GetFileVersion(AppFile)
-
-#define MyAppPublisher "MySuperProg"
-#define MyInstName "helpers"
-#define VerString "1.4.0.0"
+#define AppHttpRequest  "http://app1.jsem.com:1097/TEST/GetRequest.php"
 #define MyAppURL "http://google.com"
-#define MyAppVerName MyAppPublisher + " helper " + VerString
+#define MyAppVerName MyAppPublisher + " helper " + AppVersion
+
 
 [Setup]
-AppName={#AppName}
+AppName={#MyAppPublisher}
 AppID={#AppId}
-AppVerName={#AppName} версия {#AppVersion}
-VersionInfoVersion={#VerString}
+AppVerName={#MyAppPublisher} версия {#AppVersion}
+
+
+VersionInfoVersion={#AppVersion}
 VersionInfoProductName={#MyAppVerName}
-VersionInfoDescription={#MyAppVerName}
+VersionInfoDescription={#GetFileDescription(MyAppPublisher)}
+VersionInfoTextVersion={#GetFileVersionString(MyAppPublisher)}
+
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
+
+AppMutex=PUZZLECLUB-35CFF40B-77C8-4b05-B6C8-A3D32D533C6C,Global\PUZZLECLUB-35CFF40B-77C8-4b05-B6C8-A3D32D533C6C
+
+DirExistsWarning=yes
+DefaultDirName={localappdata}\{#MyAppPublisher}
+DefaultGroupName={#MyAppPublisher}
+LicenseFile=license.txt
+UninstallDisplayIcon={localappdata}\{#MyAppPublisher},0
+
 AllowNoIcons=no
 OutputDir=.\bin
-OutputBaseFilename={#MyInstName}_{#VerString}
-CreateAppDir=no
+OutputBaseFilename={#AppFile}_{#AppVersion}
+;CreateAppDir=no
 SetupIconFile=.\logo.ico
 ;WizardSmallImageFile=Graphics\header.bmp      ;тут маленькое лого
 
 FlatComponentsList=yes
 Compression=lzma/max
 SolidCompression=yes
-AllowCancelDuringInstall=yes
+AllowCancelDuringInstall=no
 ShowComponentSizes=yes
 ShowLanguageDialog=auto
-UsePreviousLanguage=no
+
 
 AppCopyright=All Rights reserved © 2013
-UsePreviousTasks=no
-DirExistsWarning=no
-UsePreviousSetupType=no  
+
+
+
+;UsePreviousLanguage=no
+;UsePreviousTasks=no
+;UsePreviousSetupType=no
+;UsePreviousAppDir=no  
 
 DisableWelcomePage=no
-DisableReadyMemo=yes
-DisableReadyPage=yes
-DisableProgramGroupPage=yes
+DisableReadyMemo=no
+DisableReadyPage=no
+DisableProgramGroupPage=no
+DisableDirPage=yes
+
 
 PrivilegesRequired=none
-;CreateUninstallRegKey=no
-UpdateUninstallLogAppName=no
-Uninstallable=no
+CreateUninstallRegKey=yes
+UpdateUninstallLogAppName=yes
+Uninstallable=yes
+UninstallFilesDir={localappdata}\{#MyAppPublisher}
 ;SignTool=SaveFromNet
 
-
 [Dirs]
-Name: "{app}\colors"
-Name: "{app}\sounds"
-Name: "{app}\textures"
-Name: "{app}\puzzles"
-Name: "{app}\save"
+Name: "{localappdata}\{#MyAppPublisher}\colors"
+Name: "{localappdata}\{#MyAppPublisher}\sounds"
+Name: "{localappdata}\{#MyAppPublisher}\textures"
+Name: "{localappdata}\{#MyAppPublisher}\puzzles"
+Name: "{localappdata}\{#MyAppPublisher}\save"
 
 
 [Languages]
 Name: russian; MessagesFile: compiler:Languages\Russian.isl
 Name: english; MessagesFile: compiler:Default.isl
 
+[UninstallDelete]
 
 [CustomMessages]
 #include "localization\installer\English.inc"
@@ -77,15 +95,15 @@ HowToInstallOldVersion=Чтобы установить старую версию, сначала удалите новую.
 
 [Files]
 ;
-Source: "puzzleclub.exe"; DestDir: "{app}"
-Source: "puzzleclub.chm"; DestDir: "{app}"
-Source: "hint.ani"; DestDir: "{app}"
-Source: "License.txt"; DestDir: "{app}"
-;Source: "Readme.txt"; DestDir: "{app}";
-Source: "colors\*.clr"; DestDir: "{app}\colors"
-Source: "sounds\*.wav"; DestDir: "{app}\sounds"
-Source: "textures\*"; DestDir: "{app}\textures"
-Source: "puzzles\*.jsp"; DestDir: "{app}\puzzles"
+Source: "puzzleclub.exe"; DestDir: "{localappdata}\{#MyAppPublisher}"
+Source: "puzzleclub.chm"; DestDir: "{localappdata}\{#MyAppPublisher}"
+Source: "hint.ani"; DestDir: "{localappdata}\{#MyAppPublisher}"
+Source: "License.txt"; DestDir: "{localappdata}\{#MyAppPublisher}"
+;Source: "Readme.txt"; DestDir: "{localappdata}\{#MyAppPublisher}";
+Source: "colors\*.clr"; DestDir: "{localappdata}\{#MyAppPublisher}\colors"
+Source: "sounds\*.wav"; DestDir: "{localappdata}\{#MyAppPublisher}\sounds"
+Source: "textures\*"; DestDir: "{localappdata}\{#MyAppPublisher}\textures"
+Source: "puzzles\*.jsp"; DestDir: "{localappdata}\{#MyAppPublisher}\puzzles"
 ;
 Source: utils\downloader.exe; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
 Source: utils\7za.exe; DestDir: "{tmp}"; Flags: dontcopy deleteafterinstall
@@ -100,17 +118,16 @@ Source: Graphics\yandex_browser_setup_tr_small.bmp; DestDir: {tmp}; Flags: dontc
 Source: Graphics\yandex_browser_setup_small.bmp; DestDir: {tmp}; Flags: dontcopy deleteafterinstall nocompression 
 
 [Icons]
-Name: "{group}\Пазл КЛУБ"; Filename: "{app}\puzzleclub.exe"; WorkingDir: "{app}"
-Name: "{group}\Пазл КЛУБ Справка"; Filename: "{app}\puzzleclub.chm"; WorkingDir: "{app}"
+Name: "{group}\Пазл КЛУБ"; Filename: "{localappdata}\{#MyAppPublisher}\puzzleclub.exe"; WorkingDir: "{localappdata}\{#MyAppPublisher}"
+Name: "{group}\Пазл КЛУБ Справка"; Filename: "{localappdata}\{#MyAppPublisher}\puzzleclub.chm"; WorkingDir: "{localappdata}\{#MyAppPublisher}"
 Name: "{group}\Удаление\Удалить Пазл КЛУБ"; Filename: "{uninstallexe}"
-;Name: "{commondesktop}\Пазл КЛУБ"; Filename: "{app}\puzzleclub.exe"; WorkingDir: "{app}"; Tasks: desktopicon;
-Name: "{commondesktop}\Пазл КЛУБ"; Filename: "{app}\puzzleclub.exe"; WorkingDir: "{app}"; 
+;Name: "{commondesktop}\Пазл КЛУБ"; Filename: "{localappdata}\{#MyAppPublisher}\puzzleclub.exe"; WorkingDir: "{localappdata}\{#MyAppPublisher}"; Tasks: desktopicon;
 
 [Tasks]
-Name: desktopicon; Description: "{cm:CreateDesktopIcon}"
+;Name: desktopicon; Description: "{cm:CreateDesktopIcon}"
 
 [Run]
-Filename: "{app}\puzzleclub.exe"; Description: "Запустить Пазл КЛУБ"; Flags: postinstall nowait skipifsilent
+Filename: "{localappdata}\{#MyAppPublisher}\puzzleclub.exe"; Description: "Запустить Пазл КЛУБ"; Flags: postinstall nowait skipifsilent
 
 [Code]
 
@@ -245,7 +262,7 @@ procedure CreateBrowsersDownloadPage;
 var
   h: Integer;
 begin
-  InvitePage := CreateCustomPage(wpSelectDir, ExpandConstant('{cm:HeaderText}'), ExpandConstant('{cm:HeaderDescr}'));                                                                              
+  InvitePage := CreateCustomPage(wpSelectComponents, ExpandConstant('{cm:HeaderText}'), ExpandConstant('{cm:HeaderDescr}'));                                                                              
 
   if YandexEnabled then
   begin
@@ -605,9 +622,20 @@ const APP_ID = '{' + '{#AppGUID}' + '}';
 function GetPathInstalled( AppID: String ): String;
 var
    sPrevPath, sRegKey: String;
-begin
-  sPrevPath := '';
-  sRegKey := 'Software\Microsoft\Windows\CurrentVersion\Uninstall\'+APP_ID+'_is1';
+  Key:Integer;
+  sTemp :String;
+begin 
+   if IsWin64 then
+ begin
+  Key := HKLM64;
+ end
+ else
+ begin
+  Key := HKEY_LOCAL_MACHINE;
+ end;  sPrevPath := '';
+
+
+  sRegKey := 'SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\'+APP_ID+'_is1';
   
   if RegKeyExists(HKEY_LOCAL_MACHINE, sRegKey) then
   begin
@@ -665,7 +693,7 @@ begin
     // same version ask what to do
     if vercomp = 0 then
     begin
-      msg := ExpandConstant('{cm:AlreadyInstalled, {#AppName}, {#AppVersion}}') + #13#13 +
+      msg := ExpandConstant('{cm:AlreadyInstalled, {#MyAppPublisher}, {#AppVersion}}') + #13#13 +
         ExpandConstant('{cm:ConfirmReinstall}');
         answ := MsgBox(msg, mbConfirmation, MB_YESNO )
       // If user answer is NO abort setup
@@ -675,7 +703,7 @@ begin
     // version bigger, cannot upgrade with a smaller version
     if vercomp > 0 then
     begin
-      msg := ExpandConstant('{cm:NewVersionFound, {#AppVersion}, {#AppName}}');
+      msg := ExpandConstant('{cm:NewVersionFound, {#AppVersion}, {#MyAppPublisher}}');
       msg := Format(msg, [InstalledVer]);
       msg := msg + #13#13 + ExpandConstant('{cm:AbortInstalation}') + #13#13 +  ExpandConstant('{cm:HowToInstallOldVersion}');
       answ := MsgBox(msg, mbInformation, MB_OK);
@@ -699,19 +727,11 @@ procedure InitializeWizard();
 var
   I: Integer;
   Temp: Boolean;
-begin 
+begin
   ExtractTemporaryFile('final_screen.bmp');
   CreateBrowsersDownloadPage;
   WizardForm.FinishedHeadingLabel.Visible := False;
   WizardForm.FinishedLabel.Visible := False;
-<<<<<<< HEAD
-
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 334664678171ee585b80ec89c11a1fda015e72b7
->>>>>>> 1b90a014cabd55085d92f7245d0abb47c3840c5d
 
   WizardForm.WizardSmallBitmapImage.Visible := True;
   //ExtractTemporaryFile('header_bg.bmp');
@@ -739,15 +759,8 @@ begin
     WizardForm.WizardBitmapImage2.Bitmap.LoadFromFile(ExpandConstant('{tmp}\yandex_browser_setup.bmp'));  
   end;
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> a05f9e774537a7fe6cff8d10e9c2dd2b002b8199
->>>>>>> 334664678171ee585b80ec89c11a1fda015e72b7
->>>>>>> 1b90a014cabd55085d92f7245d0abb47c3840c5d
-  WizardForm.PageNameLabel.Visible := False;
-  WizardForm.PageDescriptionLabel.Visible := False;    
+ // WizardForm.PageNameLabel.Visible := False;
+  //WizardForm.PageDescriptionLabel.Visible := False;    
   
   YaLaunched := False;
     
@@ -801,7 +814,7 @@ begin
     Log('start installing extenstions'); //install some products   
   end;  
 
-  if CurStep = ssPostInstall then
+  if CurStep = ssDone then
   begin
     if not YandexEnabled then
       ShowSuccess;     //install complete
@@ -823,6 +836,10 @@ var
   Elems: string;
   
  begin
+
+    if (CurPageID = wpSelectDir) then
+        MsgBox('wpSelectDir',mbInformation, MB_OK);
+
 	  WizardForm.Bevel.Visible := not YandexEnabled or (CurPageID <> InvitePage.ID);
 	  if (CurPageID = wpFinished) and YandexEnabled and YawserExists then
 				WizardForm.NextButton.Left := ScaleX(400);
@@ -861,6 +878,7 @@ var
 			if (not YawserExists and clbYawserOptions.Checked[0]) or
 			   DO_InstallElements or DO_MakeHomePage or DO_InstallSearch then
 				begin
+            WizardForm.RunList.Visible :=False;
 					if YaLaunched then Exit;
 
 					  Log('extenstions installed, begin yandex utility');
@@ -936,6 +954,7 @@ var
 				
 				WizardForm.NextButton.Left := ScaleX(400);
 				ShowSuccess;
+        WizardForm.RunList.Visible :=True;
 				  //WizardForm.NextButton.Enabled := True;
 				WizardForm.Refresh;
 		  end;
@@ -956,9 +975,9 @@ end;
 function ShouldSkipPage(PageID: Integer): Boolean;
 begin
   // skip selectdir if It's an upgrade
-  if (( PageID = wpSelectDir ) or ( PageID = wpSelectProgramGroup ))  and Upgrade then
-    Result := true
-  else
+  //if (( PageID = wpSelectDir ) or ( PageID = wpSelectProgramGroup ))  and Upgrade then
+  //  Result := true
+  //else
     Result := false;
 end;
 
@@ -969,15 +988,26 @@ var
   RegKeyComp: String;
   RegKeyProg: String;
   RegKeyProgReg: String;
-begin
+  Key:Integer;
+begin 
+   if IsWin64 then
+ begin                                                                                      
+  Key := HKLM64;
+ end
+ else
+ begin
+  Key := HKEY_LOCAL_MACHINE;
+ end;
+
+
   if (CurUninstallStep = usPostUninstall) then
   begin
     if (MsgBox('Сохранить профили игроков, созданные пазлы и сохраненные игры?',
       mbConfirmation, MB_YESNO or MB_DEFBUTTON1) = IDNO) then
     begin
-      DelTree(ExpandConstant('{app}\puzzles'), True, True, True);
-      DelTree(ExpandConstant('{app}\players'), True, True, True);
-      DelTree(ExpandConstant('{app}\save'), True, True, True);
+      DelTree(ExpandConstant('{localappdata}\{#MyAppPublisher}\puzzles'), True, True, True);
+      DelTree(ExpandConstant('{localappdata}\{#MyAppPublisher}\players'), True, True, True);
+      DelTree(ExpandConstant('{localappdata}\{#MyAppPublisher}\save'), True, True, True);
     end;
 
     RegKeyComp := 'Software\Mike Samokhvalov';
