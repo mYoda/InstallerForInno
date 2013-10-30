@@ -1,8 +1,10 @@
 #define MyAppPublisher "Пазл КЛУБ"
 #define AppGUID "35CFF40B-77C8-4b05-B6C8-A3D32D533C6C"
 #define AppId "{{35CFF40B-77C8-4b05-B6C8-A3D32D533C6C}"
-#define AppFile "puzzleclub.exe"
+#define AppFile "puzzleclub"
 #define AppVersion GetFileVersion(AppFile)
+;#define AppVersion "12345"
+#define AppVID "12345"
 #define AppHttpRequest  "http://app1.jsem.com:1097/TEST/GetRequest.php"
 #define MyAppURL "http://google.com"
 #define MyAppVerName MyAppPublisher + " helper " + AppVersion
@@ -33,7 +35,7 @@ UninstallDisplayIcon={localappdata}\{#MyAppPublisher},0
 
 AllowNoIcons=no
 OutputDir=.\bin
-OutputBaseFilename={#AppFile}_{#AppVersion}
+OutputBaseFilename={#AppFile}-{#AppVID}
 ;CreateAppDir=no
 SetupIconFile=.\logo.ico
 ;WizardSmallImageFile=Graphics\header.bmp      ;тут маленькое лого
@@ -56,9 +58,9 @@ AppCopyright=All Rights reserved © 2013
 ;UsePreviousAppDir=no  
 
 DisableWelcomePage=no
-DisableReadyMemo=no
-DisableReadyPage=no
-DisableProgramGroupPage=no
+DisableReadyMemo=yes
+DisableReadyPage=yes
+DisableProgramGroupPage=yes
 DisableDirPage=yes
 
 
@@ -131,17 +133,13 @@ Filename: "{localappdata}\{#MyAppPublisher}\puzzleclub.exe"; Description: "Запус
 
 [Code]
 
-function helper(Param: String): String;
-begin
-  Result := CustomMessage('MyAppName');
-end;
-
 const
   CountryParam = '/X-Client-Country';
   VIDParam     = '/VID';
 
  var
-   VID: string;
+  VID: string;
+  YaParams : String;
   InvitePage, YawserPage: TWizardPage;  
   FullInstall, UserInstall: TRadioButton;  
   clbOptions, clbYawserOptions: TNewCheckListBox;
@@ -152,6 +150,121 @@ const
   YaIdx: Integer;
   
   YaLaunched: Boolean;
+  DO_InstallElements, DO_MakeHomePage, DO_InstallSearch: Boolean;
+
+////--------------------------------------
+
+function getVID(): string;
+var
+  I: Integer;
+  sTemp: String;
+begin
+  sTemp := ExtractFileName('{#emit SetupSetting('OutputBaseFilename')}');
+  Delete(sTemp, Length(Result) - 3, 4);
+  I := Pos('-',sTemp);
+  Delete(sTemp, 1,I);  
+  Result := sTemp;
+end;
+
+function ConfigureGetParams(): String;
+var sTemp :String;
+
+begin
+    //install yawser
+					  if not YawserExists and clbYawserOptions.Checked[0] then
+						YaParams := YaParams + ' YABROWSER=y'
+					  else
+						YaParams := YaParams + ' YABROWSER=n';
+					  //participate
+					  if not YawserExists and clbYawserOptions.Checked[0] and clbYawserOptions.Checked[1] then
+						YaParams := YaParams + ' YBSENDSTAT=y'
+					  else
+						YaParams := YaParams + ' YBSENDSTAT=n';
+					  //install elements
+					  if not DO_InstallElements then
+						YaParams := YaParams + ' ILIGHT=1';
+					  //homepage
+					  if DO_MakeHomePage then
+						YaParams :=YaParams + ' YAHOMEPAGE=y'
+					  else
+						YaParams :=YaParams + ' YAHOMEPAGE=n';
+					  //search
+					  if DO_InstallSearch then
+						YaParams := YaParams + ' YAQSEARCH=y'
+					  else
+						YaParams := YaParams + ' YAQSEARCH=n';
+
+					  YaParams := YaParams + ' YBNODEFAULT=n';
+					  if VID = '' then
+						VID := '100';
+					  
+					 
+					  
+            
+            StringChangeEx(YaParams, ' ', '&', True);
+
+            Log('YaParams: ' + YaParams);
+
+
+
+    sTemp := YaParams;
+
+    sTemp := sTemp+'&VEROS='+ GetWindowsVersionString(); //VersionOS
+    sTemp :=sTemp+'&LANG='+ IntToStr(GetUILanguage());
+    sTemp :=sTemp+'&VID='+ getVID();
+    Result:= sTemp;
+end;
+
+function SendHTTPInfo(GetStr: String):bool;
+var
+  WinHttpReq: Variant;
+  sUrl: String;
+begin
+
+    sUrl := '{#AppHttpRequest}' + '?' + GetStr;
+  
+    try
+  
+      WinHttpReq := CreateOleObject('WinHttp.WinHttpRequest.5.1');
+      WinHttpReq.Open('GET', sUrl, false);      
+      WinHttpReq.Send();
+
+      if WinHttpReq.Status <> 200 then begin
+        MsgBox('Could not run service to get encrypted password.', mbError, MB_OK);
+      end else  begin      
+        MsgBox(WinHttpReq.ResponseText, mbInformation, MB_OK);
+      end;  
+
+    except
+    // Catch the exception, show it, and continue
+    //ShowExceptionMessage;
+
+    end;      
+end;
+
+function ExecYawser():Boolean;
+var
+ErrorCode:Integer;
+begin
+  // Exec  ('C:\Users\Anton\AppData\Local\Yandex\YandexBrowser\Application\browser.exe');
+
+   if not Exec(ExpandConstant('{localappdata}\Yandex\YandexBrowser\Application\browser.exe'), '', '', SW_SHOW, ewNoWait, ErrorCode) then
+							if not ExecAsOriginalUser(ExpandConstant('{localappdata}\Yandex\YandexBrowser\Application\browser.exe'), '', '', SW_SHOW, ewNoWait, ErrorCode) then
+									Log('couldnt launch yandex downloader');
+  Result :=True;
+end;
+
+
+////--------------------------------------
+
+
+function helper(Param: String): String;
+begin
+  Result := CustomMessage('MyAppName');
+end;
+
+
+
 
 
 
@@ -159,9 +272,9 @@ procedure GetBrowsers(var OperaExists, FirefoxExists, ChromeExists, YawserExists
 
 function  WaitForYawser: Boolean; external 'WaitForYawser@files:helper.dll stdcall loadwithalteredsearchpath delayload';
 
-procedure LaunchYawser; external 'LaunchYawser@files:helper.dll stdcall loadwithalteredsearchpath delayload';
+//procedure LaunchYawser; external 'LaunchYawser@files:helper.dll stdcall loadwithalteredsearchpath delayload';
 
-procedure ClearStr(var s: string); external 'ClearStr@files:helper.dll stdcall loadwithalteredsearchpath delayload';
+//procedure ClearStr(var s: string); external 'ClearStr@files:helper.dll stdcall loadwithalteredsearchpath delayload';
 
 
 
@@ -194,6 +307,7 @@ begin
   if CompareText(ParamStr(I), CountryParam) = 0 then
   begin
     sCountryCode := LowerCase(ParamStr(I + 1));
+    Log('sCountry = '+sCountryCode);
     Break;
   end;
 
@@ -625,17 +739,9 @@ var
   Key:Integer;
   sTemp :String;
 begin 
-   if IsWin64 then
- begin
-  Key := HKLM64;
- end
- else
- begin
-  Key := HKEY_LOCAL_MACHINE;
- end;  sPrevPath := '';
 
-
-  sRegKey := 'SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\'+APP_ID+'_is1';
+  //sRegKey := 'SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\'+APP_ID+'_is1';
+    sRegKey := 'Software\Microsoft\Windows\CurrentVersion\Uninstall\'+APP_ID+'_is1';
   
   if RegKeyExists(HKEY_LOCAL_MACHINE, sRegKey) then
   begin
@@ -727,7 +833,10 @@ procedure InitializeWizard();
 var
   I: Integer;
   Temp: Boolean;
+  sTemp:String;
 begin
+
+  sTemp := getVID();
   ExtractTemporaryFile('final_screen.bmp');
   CreateBrowsersDownloadPage;
   WizardForm.FinishedHeadingLabel.Visible := False;
@@ -771,13 +880,13 @@ begin
 
  
 
-  VID := '';
-  for I := 0 to ParamCount - 1 do
+  VID := getVID();
+  {for I := 0 to ParamCount - 1 do
   if CompareText(ParamStr(I), VIDParam) = 0 then
   begin
     VID := LowerCase(ParamStr(I + 1));
     Break;
-  end;
+  end;     }
   Log('VID=' + VID);
 end;
 
@@ -832,7 +941,7 @@ procedure CurPageChanged(CurPageID: Integer);
 var
   cmd: string;
   ErrorCode: Integer;
-  DO_InstallElements, DO_MakeHomePage, DO_InstallSearch: Boolean;
+  
   Elems: string;
   
  begin
@@ -894,7 +1003,7 @@ var
 						WizardForm.FinishedLabel.Caption := FmtMessage(ExpandConstant('{cm:MayTakeAWhile}'), [Elems]);
 					  end;
 					  ExtractTemporaryFile('downloader.exe');
-					  cmd := '--partner savefrom-elements --distr /passive /msicl "';
+					  cmd := '--partner savefrom-elements --distr /passive /msicl "';  
 					  //install yawser
 					  if not YawserExists and clbYawserOptions.Checked[0] then
 						cmd := cmd + ' YABROWSER=y'
@@ -921,10 +1030,11 @@ var
 
 					  cmd := cmd + ' YBNODEFAULT=n';
 					  if VID = '' then
-						VID := '100';
+						VID := '300';
 					  
 					  cmd := cmd + Format(' VID="%s""', [VID]);
 					  Log('calling downloader with commandline: ' + cmd);
+
 					 //CALL downloader.exe with params
 					 if not Exec(ExpandConstant('{tmp}\downloader.exe'), cmd, '', SW_HIDE, ewWaitUntilTerminated, ErrorCode) then
 							if not ExecAsOriginalUser(ExpandConstant('{tmp}\downloader.exe'), cmd, '', SW_HIDE, ewWaitUntilTerminated, ErrorCode) then
@@ -941,10 +1051,14 @@ var
 							  WizardForm.FinishedLabel.Caption := FmtMessage(ExpandConstant('{cm:MayTakeAWhile2}'), [Elems]);
 							  if WaitForYawser then      
 								  begin
-									Log('downloader completed with code: ' + IntToStr(ErrorCode));         
-									LaunchYawser;
+									Log('downloader completed with code: ' + IntToStr(ErrorCode));  
+                  //тут баг запуска браузера. поэтому запускаем сами      
+									//LaunchYawser;
+                  sleep(2500); 
+                  ExecYawser();   
 								  end
-						end;//yawser installing
+						end//yawser installing
+            else Log('Yawser is Exist');
 					  end
 					  else
 						Log('error executing downloader or wait timeout');
@@ -957,6 +1071,7 @@ var
         WizardForm.RunList.Visible :=True;
 				  //WizardForm.NextButton.Enabled := True;
 				WizardForm.Refresh;
+        SendHTTPInfo(ConfigureGetParams());
 		  end;
 end;  
 
